@@ -1,8 +1,11 @@
 package guru.qa;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
@@ -22,16 +25,29 @@ public class RegistrationForm {
     @Test
     void fillFormTest() {
         open("https://demoqa.com/automation-practice-form");
-        $("[id=firstName]").setValue("Peter");
-        $("[id=lastName]").setValue("Ivanov");
-        $("[id=userEmail]").setValue("ivanov_petya@test.com");
-        $("[for=gender-radio-1]").click();
-        $("[id=userNumber]").setValue("+712345677");
-        $("[class=react-datepicker-wrapper]").click();
-        $("[class=react-datepicker__month-select]").selectOption("February");
-        $("[class=react-datepicker__year-select]").selectOption("1980");
-        $(byText("24")).click();
-//        $("[aria-label=Choose Tuesday, March 18th, 1980]").click();
+        $("#firstName").setValue("Peter");
+        $("#lastName").setValue("Ivanov");
+        $("#userEmail").setValue("ivanov_petya@test.com");
+        $("label[for=gender-radio-1]").click();
+        $("#userNumber").setValue("7123456770");
+        $(".react-datepicker-wrapper").click();
+        $(".react-datepicker__month-select").selectOption("February");
+        $(".react-datepicker__year-select").selectOption("1980");
+        $(".react-datepicker__day--015").click();
+        $("label[for=hobbies-checkbox-1]").click();
+        $("label[for=hobbies-checkbox-3]").click();
+        $("#subjectsInput").setValue("Computer Science").pressEnter();
+        $("#subjectsInput").setValue("Economics").pressEnter();
+        $("#state").click(); $("#stateCity-wrapper").find(byText("Haryana")).click();
+        $("#city").click(); $("#stateCity-wrapper").find(byText("Karnal")).click();
+
+//        $("#uploadPicture").uploadFile(new File("src/test/java/resources/test.jpg"));
+        $("#uploadPicture").uploadFromClasspath("test.jpg");
+//        Selenide.executeJavaScript("document.body.style.zoom='80%'");
+        $("#submit").click();
+
+
+
 
 
 
