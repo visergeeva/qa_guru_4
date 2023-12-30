@@ -25,6 +25,11 @@ public class RegistrationForm {
     @Test
     void fillFormTest() {
         open("https://demoqa.com/automation-practice-form");
+        executeJavaScript("$('#fixedban').remove()");
+        executeJavaScript("$('footer').remove()");
+
+        //Заполнение формы
+
         $("#firstName").setValue("Peter");
         $("#lastName").setValue("Ivanov");
         $("#userEmail").setValue("ivanov_petya@test.com");
@@ -40,39 +45,22 @@ public class RegistrationForm {
         $("#subjectsInput").setValue("Economics").pressEnter();
         $("#state").click(); $("#stateCity-wrapper").find(byText("Haryana")).click();
         $("#city").click(); $("#stateCity-wrapper").find(byText("Karnal")).click();
-
-//        $("#uploadPicture").uploadFile(new File("src/test/java/resources/test.jpg"));
+        $("[id=currentAddress]").setValue("Marra avenu, 1");
         $("#uploadPicture").uploadFromClasspath("test.jpg");
-//        Selenide.executeJavaScript("document.body.style.zoom='80%'");
         $("#submit").click();
 
+        //Проверки
 
-
-
-
-
-
-
-
-
-
-
-//        $("[id=currentAddress]").setValue("Marra avenu, 1");
-
-//        $("[id=dateOfBirthInput]").setValue("12 Oct 1980");
-//        $("[class=subjects-auto-complete__value-container]").click();
-
-
-//        $("[id=firstName]").shouldHave(text("Peter"));
-
-//        $("[id=lastName]").shouldHave(text("Ivanov"));
-//        $("[id=userEmail]").shouldHave(text("ivanov_petya@boxx.com"));
-//        $("[for=gender-radio-1]").shouldHave(text("Another street 1"));
-
-
-
-
-
+        $(".modal-content").shouldHave(text("Peter Ivanov"));
+        $(".modal-content").shouldHave(text("ivanov_petya@test.com"));
+        $(".modal-content").shouldHave(text("Male"));
+        $(".modal-content").shouldHave(text("7123456770"));
+        $(".modal-content").shouldHave(text("15 February,1980"));
+        $(".modal-content").shouldHave(text("Computer Science, Economics"));
+        $(".modal-content").shouldHave(text("Sports, Music"));
+        $(".modal-content").shouldHave(text("test.jpg"));
+        $(".modal-content").shouldHave(text("Marra avenu, 1"));
+        $(".modal-content").shouldHave(text("Haryana Karnal"));
 
     }
 }
