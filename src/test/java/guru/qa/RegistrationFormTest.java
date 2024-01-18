@@ -1,65 +1,86 @@
 package guru.qa;
 
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import pages.RegistrationPage;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
 
-public class RegistrationFormTest {
+public class RegistrationFormTest extends TestBase {
 
-    @BeforeAll
-    static void beforeAll() {
-        Configuration.browserSize = "1920x1080";
-        Configuration.baseUrl = "https://demoqa.com";
-        Configuration.pageLoadStrategy = "eager";
-        Configuration.holdBrowserOpen = false;
-        Configuration.timeout = 5000; // default 4000
-    }
+    RegistrationPage registrationPage = new RegistrationPage();
 
     @Test
     void fillFormTest() {
-        open("/automation-practice-form");
-        executeJavaScript("$('#fixedban').remove()");
-        executeJavaScript("$('footer').remove()");
+        registrationPage.openPage()
 
-        //Заполнение формы
+                //Заполнение формы
 
-        $("#firstName").setValue("Peter");
-        $("#lastName").setValue("Ivanov");
-        $("#userEmail").setValue("ivanov_petya@test.com");
-        $("#genterWrapper").find(byText("Male")).click();
-        $("#userNumber").setValue("7123456770");
-        $(".react-datepicker-wrapper").click();
-        $(".react-datepicker__month-select").selectOption("February");
-        $(".react-datepicker__year-select").selectOption("1980");
-        $(".react-datepicker__day--015").click();
-        $("#subjectsInput").setValue("Computer Science").pressEnter();
-        $("#subjectsInput").setValue("Economics").pressEnter();
-        $("#hobbiesWrapper").find(byText("Sports")).click();
-        $("#hobbiesWrapper").find(byText("Music")).click();
-        $("#state").click();
-        $("#stateCity-wrapper").find(byText("Haryana")).click();
-        $("#city").click();
-        $("#stateCity-wrapper").find(byText("Karnal")).click();
-        $("#currentAddress").setValue("Marra avenu, 1");
-        $("#uploadPicture").uploadFromClasspath("test.jpg");
-        $("#submit").click();
+                .setFirstName("Peter")
+                .setLastName("Ivanov")
+                .setUserEmail("ivanov_petya@test.com")
+                .setUserNumber("7123456770")
+                .setGender("Male")
+                .setHobby("Sports")
+                .setHobby("Music")
+                .setCurrentAddress("Marra avenu, 1")
+                .setDateOfBirth("20", "April", "1978")
+                .setSubjects("Computer Science")
+                .setSubjects("Economics")
+                .setState("Haryana")
+                .setCity("Karnal")
+                .setPicture("test.jpg")
+                .submit();
 
-        //Проверки
+                 //Проверки
 
-        $(".modal-content").shouldHave(text("Peter Ivanov"));
-        $(".modal-content").shouldHave(text("ivanov_petya@test.com"));
-        $(".modal-content").shouldHave(text("Male"));
-        $(".modal-content").shouldHave(text("7123456770"));
-        $(".modal-content").shouldHave(text("15 February,1980"));
-        $(".modal-content").shouldHave(text("Computer Science, Economics"));
-        $(".modal-content").shouldHave(text("Sports, Music"));
-        $(".modal-content").shouldHave(text("test.jpg"));
-        $(".modal-content").shouldHave(text("Marra avenu, 1"));
-        $(".modal-content").shouldHave(text("Haryana Karnal"));
+        registrationPage.checkResult("Student Name", "Peter Ivanov")
+                .checkResult("Student Email", "ivanov_petya@test.com")
+                .checkResult("Gender", "Male")
+                .checkResult("Mobile", "7123456770")
+                .checkResult("Date of Birth", "20 April,1978")
+                .checkResult("Subjects", "Computer Science, Economics")
+                .checkResult("Hobbies", "Sports, Music")
+                .checkResult("Picture", "test.jpg")
+                .checkResult("Address", "Marra avenu, 1")
+                .checkResult("State and City", "Haryana Karnal");
+
+    };
+
+    @Test
+    void minimalInputDataTest() {
+        registrationPage.openPage()
+
+                //Заполнение формы
+
+                .setFirstName("Test")
+                .setLastName("Testoviy")
+                .setUserNumber("1234567890")
+                .setGender("Other")
+                .submit();
+
+                //Проверки
+
+        registrationPage.checkResult("Student Name", "Test Testoviy")
+                .checkResult("Gender", "Other")
+                .checkResult("Mobile", "1234567890")
+        ;
+
+
+    };
+
+    @Test
+    void negativeCheckTest() {
+        registrationPage.openPage()
+
+                //Заполнение формы
+
+                .setFirstName("Test")
+                .setLastName("Testoviy")
+                .setUserNumber("checking")
+                .submit();
+
+                //Проверки
+        registrationPage.noResult();
+
 
     }
 }
