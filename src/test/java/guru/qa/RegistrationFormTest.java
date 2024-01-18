@@ -43,7 +43,7 @@ public class RegistrationFormTest extends TestBase {
                 .checkResult("Address", "Marra avenu, 1")
                 .checkResult("State and City", "Haryana Karnal");
 
-    };
+    }
 
     @Test
     void minimalInputDataTest() {
@@ -65,7 +65,7 @@ public class RegistrationFormTest extends TestBase {
         ;
 
 
-    };
+    }
 
     @Test
     void negativeCheckTest() {
