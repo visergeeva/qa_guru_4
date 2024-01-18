@@ -79,6 +79,7 @@ public class RegistrationFormTest extends TestBase {
                 .submit();
 
                 //Проверки
+
         registrationPage.noResult();
 
 
